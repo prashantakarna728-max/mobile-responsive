@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QatarMobileOS | Enterprise Retail Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }, 
+                    colors: { brand: '#4F46E5', 'brand-dark': '#312E81', 'brand-light': '#818CF8' },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                } 
+            } 
+        }
+    </script>
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .dark-glass { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        /* NEW ADVANCED STYLES */
+        /* Scroll Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* Cyber Grid Background */
+        .cyber-grid { 
+            background-size: 40px 40px; 
+            background-image: 
+                linear-gradient(to right, rgba(79, 70, 229, 0.04) 1px, transparent 1px), 
+                linear-gradient(to bottom, rgba(79, 70, 229, 0.04) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        /* Futuristic Custom Cursor */
+        .cursor-glow {
+            pointer-events: none;
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(79,70,229,0.15) 0%, rgba(0,0,0,0) 50%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s;
+            mix-blend-mode: multiply;
+        }
+
+        /* Continuous Marquee Animation */
+        .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; position: relative; display: flex; }
+        .marquee-content { display: flex; animation: marquee 25s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Glowing Button Effect */
+        .glow-btn { position: relative; z-index: 1; }
+        .glow-btn::before {
+            content: ''; position: absolute; inset: -2px;
+            background: linear-gradient(45deg, #4F46E5, #9333ea, #4F46E5, #10b981);
+            background-size: 200% 200%;
+            z-index: -1; filter: blur(12px); opacity: 0; transition: opacity 0.3s; border-radius: inherit;
+            animation: gradientMove 3s ease infinite;
+        }
+        .glow-btn:hover::before { opacity: 1; }
+        @keyframes gradientMove { 0% {background-position: 0% 50%} 50% {background-position: 100% 50%} 100% {background-position: 0% 50%} }
+
+        /* 3D Card Hover Utility */
+        .tilt-card { transform-style: preserve-3d; transform: perspective(1000px); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased selection:bg-brand selection:text-white overflow-x-hidden">
+
+    <!-- Custom Futuristic Cursor Glow -->
+    <div class="cursor-glow hidden lg:block" id="cursorGlow"></div>
+
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <!-- New Cyber Grid Layer -->
+        <div class="absolute inset-0 cyber-grid z-[-2]"></div>
+        
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-light/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-emerald-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-purple-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <nav class="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto glass-panel rounded-2xl px-6 py-4 flex justify-between items-center shadow-lg shadow-gray-200/50 relative">
+            <div class="flex items-center space-x-3 group cursor-pointer">
+                <div class="w-10 h-10 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold shadow-md transform group-hover:rotate-12 transition-transform duration-300 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight text-gray-900">QatarMobileOS</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8 bg-white/50 px-6 py-2 rounded-full border border-gray-100 backdrop-blur-md">
+                <a href="#problem" class="text-sm font-semibold text-gray-600 hover:text-brand transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand after:transition-all hover:after:w-full">The Challenge</a>
+                <a href="#features" class="text-sm font-semibold text-gray-600 hover:text-brand transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand after:transition-all hover:after:w-full">Platform Engine</a>
+                <a href="#compliance" class="text-sm font-semibold text-gray-600 hover:text-brand transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand after:transition-all hover:after:w-full">ZATCA / QCB Ready</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden sm:block relative overflow-hidden group bg-gray-900 text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 text-sm glow-btn">
+                    <span class="relative z-10 flex items-center gap-2">Access Portal <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>
+                    <div class="absolute inset-0 h-full w-full bg-gradient-to-r from-brand via-purple-500 to-brand-dark opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200 transition-colors focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobileMenu" class="absolute top-[120%] left-0 right-0 glass-panel border border-gray-200/50 rounded-2xl p-4 flex flex-col space-y-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-4 transition-all duration-300 md:hidden z-50 origin-top">
+                <a href="#problem" class="px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-white/50 rounded-lg transition-colors">The Challenge</a>
+                <a href="#features" class="px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-white/50 rounded-lg transition-colors">Platform Engine</a>
+                <a href="#compliance" class="px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-white/50 rounded-lg transition-colors">ZATCA / QCB Ready</a>
+                <a href="login.html" class="mt-2 text-center bg-brand text-white px-4 py-3 rounded-xl font-semibold shadow-md">Access Portal</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative max-w-7xl mx-auto px-6 pt-40 pb-20 lg:pt-48 lg:pb-24 flex flex-col lg:flex-row items-center gap-16">
+        <div class="flex-1 text-center lg:text-left z-10 reveal">
+            <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full text-xs font-bold bg-white border border-gray-200 shadow-sm mb-8 hover:shadow-md transition-shadow cursor-default">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span>
+                </span>
+                Live Demo: Multi-Branch Qatar Network
+            </div>
+            <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 leading-[1.05]">
+                Unify your premium <br class="hidden lg:block"/>
+                <span class="bg-gradient-to-r from-brand via-purple-600 to-indigo-500 bg-clip-text text-transparent relative inline-block">
+                    mobile storefronts.
+                    <span class="absolute -bottom-2 left-0 w-full h-2 bg-gradient-to-r from-brand to-indigo-500 rounded-full opacity-20 blur-sm"></span>
+                </span>
+            </h1>
+            <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                Bridge the gap between rapid POS checkouts in Vendôme and macro-level inventory tracking at Corporate HQ. Engineered specifically for high-volume GCC mobile retailers.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <a href="login.html" class="glow-btn w-full sm:w-auto bg-brand text-white px-8 py-4 rounded-xl font-bold text-base hover:bg-brand-dark transition-all shadow-lg shadow-brand/30 flex items-center justify-center gap-3 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 z-0"></div>
+                    <span class="relative z-10">Launch Interactive Prototype</span> <i class="fa-solid fa-desktop relative z-10 group-hover:animate-pulse"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="flex-1 w-full relative h-[400px] lg:h-[500px] perspective-1000 hidden md:block reveal" style="transition-delay: 200ms;">
+            <div class="absolute inset-0 bg-gradient-to-tr from-gray-100 to-white rounded-3xl border border-white shadow-2xl transform rotate-y-[-10deg] rotate-x-[5deg] animate-float glass-panel flex flex-col p-6 tilt-card group">
+                <div class="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent rounded-3xl z-10 pointer-events-none"></div>
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4 relative z-20">
+                    <div class="w-32 h-4 bg-gray-200 rounded-full overflow-hidden relative">
+                        <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 w-[200%] animate-[marquee_2s_linear_infinite]"></div>
+                    </div>
+                    <div class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-brand shadow-inner"><i class="fa-solid fa-chart-line"></i></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6 relative z-20">
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-brand/30 transition-colors cursor-default">
+                        <div class="w-16 h-3 bg-gray-200 rounded-full mb-3"></div>
+                        <div class="text-2xl font-bold text-gray-900 flex items-baseline gap-1">
+                            QAR <span class="counter" data-target="184200">184,200</span>
+                        </div>
+                        <div class="text-xs text-emerald-500 font-bold mt-1 flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> +14.2% Today</div>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-red-500/30 transition-colors cursor-default">
+                        <div class="w-16 h-3 bg-gray-200 rounded-full mb-3"></div>
+                        <div class="text-2xl font-bold text-gray-900">8 Critical</div>
+                        <div class="text-xs text-red-500 font-bold mt-1 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation animate-pulse"></i> Stock Alerts</div>
+                    </div>
+                </div>
+                <div class="flex-1 bg-gray-50 rounded-xl border border-gray-100 p-4 relative overflow-hidden group-hover:shadow-inner transition-shadow">
+                    <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-brand/20 to-transparent z-10"></div>
+                    <svg class="absolute bottom-0 w-full h-full z-0 transform group-hover:scale-105 transition-transform duration-700" preserveAspectRatio="none" viewBox="0 0 100 100">
+                        <path d="M0,100 L0,50 Q25,80 50,40 T100,20 L100,100 Z" fill="rgba(79, 70, 229, 0.1)" stroke="#4F46E5" stroke-width="2" class="animate-pulse-slow"/>
+                        <path d="M0,100 L0,60 Q30,90 60,30 T100,40 L100,100 Z" fill="rgba(79, 70, 229, 0.05)" stroke="#6366f1" stroke-width="1"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="absolute -right-8 top-12 glass-panel p-4 rounded-2xl shadow-xl animate-float animation-delay-2000 flex items-center gap-4 hover:scale-105 transition-transform cursor-pointer border-l-4 border-l-emerald-400">
+                <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=120&auto=format&fit=crop&q=60" class="w-12 h-12 rounded-lg object-cover shadow-sm">
+                <div>
+                    <p class="text-xs font-bold text-gray-900">iPhone 15 Pro Max</p>
+                    <p class="text-[10px] text-gray-500 font-medium"><i class="fa-solid fa-check-circle text-emerald-400"></i> Checkout Complete • Vendôme</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- New Futuristic Marquee Section -->
+    <div class="py-8 border-y border-gray-200/50 bg-white/40 backdrop-blur-md reveal relative z-10">
+        <div class="max-w-7xl mx-auto px-6 mb-4 text-center">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Powered by Enterprise Grade Infrastructure</p>
+        </div>
+        <div class="marquee-container opacity-60 hover:opacity-100 transition-opacity duration-500">
+            <div class="marquee-content flex gap-16 items-center px-8">
+                <!-- Set 1 -->
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-brands fa-aws text-xl"></i> AWS Hosted</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-xl"></i> SOC2 Certified</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-database text-xl"></i> Zero-Latency Sync</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-file-invoice text-xl"></i> ZATCA Ready</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-building-columns text-xl"></i> QCB Compliant</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-lock text-xl"></i> End-to-End Encrypted</span>
+                <!-- Set 2 (Duplicate for seamless loop) -->
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-brands fa-aws text-xl"></i> AWS Hosted</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-xl"></i> SOC2 Certified</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-database text-xl"></i> Zero-Latency Sync</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-file-invoice text-xl"></i> ZATCA Ready</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-building-columns text-xl"></i> QCB Compliant</span>
+                <span class="text-gray-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-lock text-xl"></i> End-to-End Encrypted</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADDED NEW SECTION: The Challenge (Makes the nav link functional) -->
+    <section id="problem" class="py-24 relative z-10 border-b border-gray-200/50 bg-white/30 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-xs uppercase tracking-widest text-red-500 font-bold mb-3 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> The Challenge
+                </h2>
+                <p class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Disconnected systems breed <span class="text-red-500">retail chaos.</span></p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pain Point 1 -->
+                <div class="glass-panel p-8 rounded-3xl border border-red-100 shadow-sm hover:shadow-xl hover:border-red-200 transition-all duration-300 reveal tilt-target group">
+                    <div class="w-12 h-12 bg-red-50 text-red-500 rounded-xl flex items-center justify-center mb-6 text-xl group-hover:bg-red-500 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Phantom Inventory</h3>
+                    <p class="text-gray-500 text-sm font-medium">Legacy systems show stock that doesn't actually exist, leading to lost sales and frustrated VIP customers across Qatar malls.</p>
+                </div>
+                
+                <!-- Pain Point 2 -->
+                <div class="glass-panel p-8 rounded-3xl border border-orange-100 shadow-sm hover:shadow-xl hover:border-orange-200 transition-all duration-300 reveal tilt-target group" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center mb-6 text-xl group-hover:bg-orange-500 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Checkout Bottlenecks</h3>
+                    <p class="text-gray-500 text-sm font-medium">Standard POS systems freeze during high-volume product launches, creating endless queues and damaging premium brand perception.</p>
+                </div>
+
+                <!-- Pain Point 3 -->
+                <div class="glass-panel p-8 rounded-3xl border border-amber-100 shadow-sm hover:shadow-xl hover:border-amber-200 transition-all duration-300 reveal tilt-target group" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center mb-6 text-xl group-hover:bg-amber-500 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                        <i class="fa-solid fa-scale-unbalanced"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Compliance Risks</h3>
+                    <p class="text-gray-500 text-sm font-medium">Manual ledger entries and delayed syncs risk massive corporate fines under strict QCB and ZATCA reporting standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END OF NEW SECTION -->
+
+    <section id="features" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-xs uppercase tracking-widest text-brand font-bold mb-3 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-microchip"></i> System Architecture
+                </h2>
+                <p class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Enterprise grade tools, <span class="italic text-gray-500 font-light">beautifully designed.</span></p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                
+                <div class="md:col-span-2 bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group overflow-hidden relative reveal tilt-target">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-brand/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 group-hover:bg-brand/15 group-hover:scale-150 transition-all duration-700"></div>
+                    <div class="absolute -bottom-10 -right-10 text-[180px] text-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rotate-12 z-0 pointer-events-none"><i class="fa-solid fa-cash-register"></i></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-indigo-50 text-brand rounded-xl flex items-center justify-center mb-6 text-xl shadow-sm group-hover:scale-110 group-hover:bg-brand group-hover:text-white transition-all duration-300"><i class="fa-solid fa-cash-register"></i></div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">High-Velocity POS Terminal</h3>
+                        <p class="text-gray-500 font-medium max-w-md">Distraction-free, lightning-fast checkout UI. Instantly search SKUs, process QAR payments, and sync local cache to the master database without latency.</p>
+                    </div>
+                    <div class="relative z-10 mt-6">
+                        <a href="pos.html" class="inline-flex items-center gap-2 text-sm font-bold text-brand hover:text-brand-dark group-hover:translate-x-2 transition-transform">Explore POS Terminal <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group reveal tilt-target" style="transition-delay: 100ms;">
+                    <div>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 text-xl shadow-sm group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Global Inventory</h3>
+                        <p class="text-gray-500 text-sm font-medium">Track serial numbers across Doha, Al Rayyan, and logistics hubs in real-time.</p>
+                    </div>
+                    <a href="inventory.html" class="inline-flex items-center gap-2 text-sm font-bold text-emerald-600 group-hover:translate-x-2 transition-transform">View SKU Matrix <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="bg-gray-900 rounded-3xl p-8 border border-gray-800 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between text-white group overflow-hidden relative reveal tilt-target" style="transition-delay: 200ms;">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-white/10 text-white rounded-xl flex items-center justify-center mb-6 text-xl backdrop-blur-sm shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-110 transition-transform"><i class="fa-solid fa-chart-pie"></i></div>
+                        <h3 class="text-xl font-bold mb-2">Macro Analytics</h3>
+                        <p class="text-gray-400 text-sm font-medium">Executive oversight. Roll up regional sales into visual KPIs and export ledgers instantly.</p>
+                    </div>
+                    <a href="analytics.html" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-indigo-400 group-hover:text-white group-hover:translate-x-2 transition-all">Open Dashboard <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="md:col-span-2 bg-gradient-to-br from-indigo-50 to-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between overflow-hidden relative group reveal tilt-target" style="transition-delay: 300ms;">
+                    <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/5 border border-brand/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-1000 z-0">
+                        <div class="w-60 h-60 border border-brand/20 rounded-full flex items-center justify-center">
+                            <div class="w-40 h-40 border border-brand/30 rounded-full animate-pulse-slow"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start relative z-10">
+                        <div>
+                            <div class="w-12 h-12 bg-white text-brand rounded-xl flex items-center justify-center mb-6 text-xl shadow-sm border border-gray-100 group-hover:scale-110 group-hover:bg-brand group-hover:text-white transition-all duration-300"><i class="fa-solid fa-network-wired"></i></div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Multi-Branch Synchronization</h3>
+                            <p class="text-gray-500 font-medium max-w-sm">When an iPhone sells at Mall of Qatar, HQ knows instantly. Automated supply chain routing eliminates phantom stock.</p>
+                        </div>
+                        
+                        <div class="hidden sm:flex flex-col gap-3">
+                            <div class="bg-white px-4 py-2 rounded-lg shadow-md border border-gray-100 flex items-center gap-3 transform group-hover:-translate-x-2 transition-transform duration-300">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div> <span class="text-xs font-bold">Doha City Center</span>
+                            </div>
+                            <div class="bg-white px-4 py-2 rounded-lg shadow-md border border-gray-100 flex items-center gap-3 opacity-80 transform group-hover:-translate-x-4 transition-transform duration-500 delay-75">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div> <span class="text-xs font-bold">Place Vendôme</span>
+                            </div>
+                            <div class="bg-white px-4 py-2 rounded-lg shadow-md border border-gray-100 flex items-center gap-3 opacity-60 transform group-hover:-translate-x-6 transition-transform duration-700 delay-150">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div> <span class="text-xs font-bold">Mall of Qatar</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="compliance" class="py-32 bg-white border-t border-gray-200 relative overflow-hidden reveal">
+        <!-- Background Accents -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand/5 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <div class="w-20 h-20 bg-gray-50 border border-gray-200 rounded-2xl flex items-center justify-center text-gray-900 text-3xl mx-auto mb-8 shadow-lg relative group">
+                <div class="absolute inset-0 bg-brand rounded-2xl scale-0 group-hover:scale-100 transition-transform duration-300 -z-10"></div>
+                <i class="fa-solid fa-shield-halved group-hover:text-white transition-colors duration-300"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">Built for GCC Compliance Standards</h2>
+            <p class="text-gray-500 text-lg font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+                Secure your data pipeline. RetailOS maintains immutable records for all QAR transactions, tax logging, and inventory state changes ensuring readiness for strict enterprise auditing.
+            </p>
+            <a href="login.html" class="inline-block bg-gray-900 text-white px-10 py-5 rounded-2xl font-bold hover:bg-black hover:scale-105 transition-all shadow-xl hover:shadow-2xl hover:shadow-gray-900/20 text-lg glow-btn">
+                Experience the Full Platform <i class="fa-solid fa-rocket ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-50 border-t border-gray-200 py-12 text-center text-sm font-medium text-gray-400 relative z-10">
+        <p class="flex items-center justify-center gap-2">
+            &copy; 2026 QatarMobileOS Enterprise Systems. 
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-100">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> All systems operational
+            </span>
+        </p>
+    </footer>
+
+    <!-- Advanced Javascript Interactions -->
+    <script>
+        // 1. Futuristic Custom Cursor Glow
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.getElementById('cursorGlow');
+            if(cursor) {
+                // Smooth follow
+                cursor.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: "forwards", easing: "ease" });
+            }
+        });
+
+        // Add interactive size increase on links and buttons
+        const interactiveElements = document.querySelectorAll('a, button, .tilt-target');
+        const cursor = document.getElementById('cursorGlow');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                if(cursor) {
+                    cursor.style.width = '500px';
+                    cursor.style.height = '500px';
+                    cursor.style.background = 'radial-gradient(circle, rgba(79,70,229,0.25) 0%, rgba(0,0,0,0) 50%)';
+                }
+            });
+            el.addEventListener('mouseleave', () => {
+                if(cursor) {
+                    cursor.style.width = '400px';
+                    cursor.style.height = '400px';
+                    cursor.style.background = 'radial-gradient(circle, rgba(79,70,229,0.15) 0%, rgba(0,0,0,0) 50%)';
+                }
+            });
+        });
+
+        // 2. Scroll Reveal Animations
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger on load
+
+        // 3. 3D Hover Tilt Effect for feature cards
+        const tiltCards = document.querySelectorAll('.tilt-target');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -5; // max 5 deg
+                const rotateY = ((x - centerX) / centerX) * 5;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.transition = 'transform 0.5s ease-out';
+            });
+            
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'none'; // Remove transition on enter for immediate response
+            });
+        });
+
+        // 4. Mobile Menu Toggle Logic
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        let menuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if(menuOpen) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                menuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            } else {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOpen = false;
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            });
+        });
+
+        // 5. Number Counter Animation on Load
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // The lower the slower
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText.replace(/,/g, '');
+                const inc = target / speed;
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc).toLocaleString();
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target.toLocaleString();
+                }
+            };
+            // Delay start slightly for effect
+            setTimeout(updateCount, 1000);
+        });
+    </script>
+</body>
+</html>

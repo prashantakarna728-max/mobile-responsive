@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Inventory | QatarMobileOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: '#4F46E5', 'brand-dark': '#312E81', pos: '#10B981' } } } }
+    </script>
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #D1D5DB; }
+    </style>
+</head>
+<body class="bg-gray-50/50 font-sans flex h-screen antialiased text-gray-900 overflow-hidden selection:bg-brand selection:text-white relative">
+
+    <div id="productModal" class="hidden fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl border border-gray-100">
+            <h2 id="modalTitle" class="text-xl font-bold mb-4">Add New Product</h2>
+            <div class="space-y-4">
+                <input type="text" id="pDetail" placeholder="Product Name" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
+                <input type="text" id="pSku" placeholder="SKU" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
+                <input type="number" id="pPrice" placeholder="Price (QAR)" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
+                <div class="flex gap-2 mt-4">
+                    <button onclick="closeModal()" class="flex-1 py-2 bg-gray-100 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-200">Cancel</button>
+                    <button onclick="saveProduct()" class="flex-1 py-2 bg-brand text-white rounded-lg text-sm font-bold hover:bg-brand-dark">Save Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <aside id="mobile-sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 z-40 shadow-lg shadow-gray-200/40 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-8 h-8 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold mr-3 shadow-md"><i class="fa-solid fa-layer-group text-xs"></i></div>
+            <span class="font-extrabold text-lg tracking-tight">QatarMobileOS</span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Enterprise Core</p>
+            <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-pie w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">HQ Overview</span></a>
+            <a href="inventory.html" class="flex items-center px-3 py-2.5 bg-indigo-50 text-brand rounded-xl font-bold transition-all border border-indigo-100/50"><i class="fa-solid fa-boxes-stacked w-5 text-sm"></i><span class="ml-2.5 text-sm">Global Inventory</span></a>
+            <a href="orders.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-receipt w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Order Fulfillment</span></a>
+            <a href="analytics.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-line w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Deep Analytics</span></a>
+            <a href="customers.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group relative"><i class="fa-solid fa-users w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Customer CRM</span></a>
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-8 mb-3">Management</p>
+            <a href="outlets.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-store w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Branch Outlets</span></a>
+            <a href="staff.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-id-badge w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Staff & Shifts</span></a>
+            <a href="settings.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-gears w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">System Settings</span></a>
+            <div class="mt-6 pt-6 border-t border-gray-100">
+                <a href="pos.html" class="flex items-center px-3 py-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl font-bold transition-all shadow-sm border border-emerald-100 group"><i class="fa-solid fa-cash-register w-5 text-sm group-hover:scale-110 transition-transform"></i><span class="ml-2.5 text-sm">Launch POS Terminal</span></a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        <header class="h-16 glass-panel border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 shrink-0 z-10">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="lg:hidden mr-4 text-gray-500 hover:text-brand"><i class="fa-solid fa-bars text-lg"></i></button>
+                <div class="text-xs font-semibold text-gray-500 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                    <span class="hidden sm:inline">Qatar Enterprise Node</span>
+                    <i class="fa-solid fa-chevron-right mx-2 text-[9px] text-gray-300 hidden sm:inline"></i>
+                    <span class="font-bold text-brand">Inventory Manager</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 lg:mb-8 gap-4">
+                <h1 class="text-2xl lg:text-3xl font-extrabold text-gray-900">Master Inventory</h1>
+                <button id="addBtn" class="w-full sm:w-auto bg-brand text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md hover:bg-brand-dark transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Add New Product
+                </button>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-x-auto w-full">
+                <table class="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider font-bold">
+                            <th class="p-4 pl-6">Product Details</th>
+                            <th class="p-4">SKU</th>
+                            <th class="p-4">Price (QAR)</th>
+                            <th class="p-4 text-center">Status</th>
+                            <th class="p-4 pr-6 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-gray-100" id="tableBody">
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">iPhone 15 Pro Max 256GB</td><td class="p-4 font-mono text-xs text-gray-600">APL-IP15PM-256</td><td class="p-4 font-bold">5,199.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">142 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Galaxy S24 Ultra 512GB</td><td class="p-4 font-mono text-xs text-gray-600">SAM-S24U-512</td><td class="p-4 font-bold">4,850.00</td><td class="p-4 text-center"><span class="bg-rose-50 text-rose-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">3 Low Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">MacBook Air M2 15"</td><td class="p-4 font-mono text-xs text-gray-600">APL-MBA15-M2</td><td class="p-4 font-bold">5,499.00</td><td class="p-4 text-center"><span class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">Out of Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">PlayStation 5 Console</td><td class="p-4 font-mono text-xs text-gray-600">SNY-PS5-DISC</td><td class="p-4 font-bold">2,199.00</td><td class="p-4 text-center"><span class="bg-rose-50 text-rose-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">4 Low Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">iPad Pro 12.9" M2</td><td class="p-4 font-mono text-xs text-gray-600">APL-IPP12-M2</td><td class="p-4 font-bold">4,699.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">45 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Galaxy Z Fold 5 512GB</td><td class="p-4 font-mono text-xs text-gray-600">SAM-ZF5-512</td><td class="p-4 font-bold">6,799.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">12 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">AirPods Pro 2 (USB-C)</td><td class="p-4 font-mono text-xs text-gray-600">APL-APP2-USBC</td><td class="p-4 font-bold">949.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">210 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Bose QuietComfort Ultra</td><td class="p-4 font-mono text-xs text-gray-600">BOS-QCU-BLK</td><td class="p-4 font-bold">1,599.00</td><td class="p-4 text-center"><span class="bg-amber-50 text-amber-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">15 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Nintendo Switch OLED</td><td class="p-4 font-mono text-xs text-gray-600">NIN-SW-OLED</td><td class="p-4 font-bold">1,399.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">82 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Pixel 8 Pro 128GB</td><td class="p-4 font-mono text-xs text-gray-600">GGL-P8P-128</td><td class="p-4 font-bold">3,999.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">34 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Apple Watch Ultra 2</td><td class="p-4 font-mono text-xs text-gray-600">APL-AWU2-TIT</td><td class="p-4 font-bold">3,199.00</td><td class="p-4 text-center"><span class="bg-amber-50 text-amber-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">8 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Galaxy Watch 6 Classic</td><td class="p-4 font-mono text-xs text-gray-600">SAM-GW6C-47</td><td class="p-4 font-bold">1,499.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">22 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Sony WH-1000XM5 ANC</td><td class="p-4 font-mono text-xs text-gray-600">SNY-XM5-BLK</td><td class="p-4 font-bold">1,499.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">38 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">OnePlus 12 256GB</td><td class="p-4 font-mono text-xs text-gray-600">ONE-12-256</td><td class="p-4 font-bold">3,299.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">27 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Galaxy Tab S9 Ultra</td><td class="p-4 font-mono text-xs text-gray-600">SAM-TS9U-256</td><td class="p-4 font-bold">4,899.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">18 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Apple MagSafe Charger</td><td class="p-4 font-mono text-xs text-gray-600">APL-MAGSAFE</td><td class="p-4 font-bold">199.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">350 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Samsung 45W Charger</td><td class="p-4 font-mono text-xs text-gray-600">SAM-45W-CGR</td><td class="p-4 font-bold">149.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">185 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Anker PowerCore 10k</td><td class="p-4 font-mono text-xs text-gray-600">ANK-PB-10K</td><td class="p-4 font-bold">129.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">412 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">iPhone 15 Silicone Case</td><td class="p-4 font-mono text-xs text-gray-600">APL-IP15-SIL</td><td class="p-4 font-bold">249.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">95 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                        <tr class="hover:bg-gray-50/50 transition-colors group"><td class="p-4 pl-6 font-bold text-gray-900">Logitech MX Master 3S</td><td class="p-4 font-mono text-xs text-gray-600">LOG-MX3S</td><td class="p-4 font-bold">450.00</td><td class="p-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">41 In Stock</span></td><td class="p-4 pr-6 text-right space-x-2"><button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() { 
+            document.getElementById('mobile-sidebar').classList.toggle('-translate-x-full'); 
+            document.getElementById('sidebar-overlay').classList.toggle('hidden'); 
+        }
+
+        // ORIGINAL UNTOUCHED SCRIPT LOGIC
+        const modal = document.getElementById('productModal');
+        let editingRow = null;
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            document.getElementById('modalTitle').innerText = editingRow ? "Edit Product" : "Add New Product";
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            editingRow = null;
+            document.getElementById('pDetail').value = '';
+            document.getElementById('pSku').value = '';
+            document.getElementById('pPrice').value = '';
+        }
+
+        document.getElementById('addBtn').addEventListener('click', openModal);
+
+        function saveProduct() {
+            const detail = document.getElementById('pDetail').value;
+            const sku = document.getElementById('pSku').value;
+            const price = document.getElementById('pPrice').value;
+
+            if (!detail || !sku || !price) {
+                alert("Please fill in all fields");
+                return;
+            }
+
+            if (editingRow) {
+                editingRow.children[0].innerText = detail;
+                editingRow.children[1].innerText = sku;
+                editingRow.children[2].innerText = parseFloat(price).toFixed(2);
+            } else {
+                const tbody = document.getElementById('tableBody');
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50/50 transition-colors group";
+                row.innerHTML = `
+                    <td class="p-4 pl-6 font-bold text-gray-900">${detail}</td>
+                    <td class="p-4 font-mono text-xs text-gray-600">${sku}</td>
+                    <td class="p-4 font-bold">${parseFloat(price).toFixed(2)}</td>
+                    <td class="p-4 text-center"><span class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">New</span></td>
+                    <td class="p-4 pr-6 text-right space-x-2">
+                        <button onclick="editRow(this)" class="text-gray-400 hover:text-brand"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteRow(this)" class="text-gray-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+            closeModal();
+        }
+
+        function deleteRow(btn) {
+            if(confirm("Are you sure you want to delete this item?")) btn.closest('tr').remove();
+        }
+
+        function editRow(btn) {
+            editingRow = btn.closest('tr');
+            document.getElementById('pDetail').value = editingRow.children[0].innerText;
+            document.getElementById('pSku').value = editingRow.children[1].innerText;
+            document.getElementById('pPrice').value = editingRow.children[2].innerText.replace(',', '');
+            openModal();
+        }
+    </script>
+</body>
+</html>

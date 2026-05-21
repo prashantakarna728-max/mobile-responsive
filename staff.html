@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff & Shifts | QatarMobileOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }, 
+                    colors: { brand: '#4F46E5', 'brand-dark': '#312E81', pos: '#10B981' } 
+                } 
+            } 
+        }
+    </script>
+    <style>
+        .manage-menu { display: none; }
+        .manage-menu.active { display: block; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #D1D5DB; }
+    </style>
+</head>
+<body class="bg-gray-50/50 font-sans flex h-screen antialiased text-gray-900 overflow-hidden relative">
+
+    <div id="staffModal" class="hidden fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+            <h2 id="modalTitle" class="text-xl font-bold mb-4">Onboard Employee</h2>
+            <input type="hidden" id="editId">
+            <div class="space-y-4">
+                <input type="text" id="empName" placeholder="Full Name" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand outline-none">
+                <input type="text" id="empRole" placeholder="System Role" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand outline-none">
+                <div class="flex gap-2">
+                    <button onclick="closeModal()" class="w-full px-4 py-2 bg-gray-100 rounded-xl text-sm font-bold hover:bg-gray-200 transition-colors">Cancel</button>
+                    <button onclick="saveStaff()" class="w-full px-4 py-2 bg-brand text-white rounded-xl text-sm font-bold hover:bg-brand-dark transition-colors">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <aside id="mobile-sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 z-40 shadow-lg shadow-gray-200/40 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100 shrink-0">
+            <div class="w-8 h-8 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold mr-3 shadow-md"><i class="fa-solid fa-layer-group text-xs"></i></div>
+            <span class="font-extrabold text-lg tracking-tight">QatarMobileOS</span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Enterprise Core</p>
+            <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group">
+                <i class="fa-solid fa-chart-pie w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">HQ Overview</span>
+            </a>
+            <a href="inventory.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group">
+                <i class="fa-solid fa-boxes-stacked w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Global Inventory</span>
+            </a>
+            <a href="orders.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group">
+                <i class="fa-solid fa-receipt w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Order Fulfillment</span>
+            </a>
+            <a href="analytics.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group">
+                <i class="fa-solid fa-chart-line w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Deep Analytics</span>
+            </a>
+            <a href="customers.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group">
+                <i class="fa-solid fa-users w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Customer CRM</span>
+            </a>
+            
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-8 mb-3">Management</p>
+            <a href="outlets.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-store w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Branch Outlets</span></a>
+            <a href="staff.html" class="flex items-center px-3 py-2.5 bg-indigo-50 text-brand rounded-xl font-bold transition-all border border-indigo-100/50">
+                <i class="fa-solid fa-id-badge w-5 text-sm"></i><span class="ml-2.5 text-sm">Staff & Shifts</span>
+            </a>
+            <a href="settings.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-gears w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">System Settings</span></a>
+
+            <div class="mt-6 pt-6 border-t border-gray-100">
+                <a href="pos.html" class="flex items-center px-3 py-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl font-bold transition-all shadow-sm border border-emerald-100 group">
+                    <i class="fa-solid fa-cash-register w-5 text-sm group-hover:scale-110 transition-transform"></i><span class="ml-2.5 text-sm">Launch POS Terminal</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden w-full">
+        <header class="bg-white border-b border-gray-200 flex flex-col md:flex-row md:h-16 items-start md:items-center justify-between p-4 md:px-8 shrink-0 gap-4">
+            <div class="flex gap-2 w-full md:w-auto items-center">
+                <button onclick="toggleSidebar()" class="lg:hidden mr-2 text-gray-500 hover:text-brand"><i class="fa-solid fa-bars text-lg"></i></button>
+                <div class="relative w-full md:w-64 flex-1">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" onkeyup="searchStaff()" placeholder="Search by name..." class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand outline-none">
+                </div>
+            </div>
+            <div class="flex gap-2 w-full md:w-auto">
+                <button onclick="generateSchedule()" class="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-2 rounded-xl text-xs font-bold shadow-sm hover:bg-gray-50 transition-colors">Schedule Generator</button>
+                <button onclick="openModal()" class="flex-1 md:flex-none bg-brand text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-brand-dark transition-colors">Onboard Employee</button>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar min-h-0">
+            <div class="mb-6"><h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">Personnel Roster</h1></div>
+            
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase">Employee</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase">System Role</th>
+                            <th class="px-6 py-4 text-right text-[10px] font-bold text-gray-400 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffTable" class="bg-white divide-y divide-gray-200">
+                        
+                        <tr id="row-1" class="hover:bg-gray-50 transition-colors" data-name="Ali Mahmoud" data-role="Senior Cashier">
+                            <td class="px-6 py-4 font-bold text-sm name-display">Ali Mahmoud</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 role-display">Senior Cashier</td>
+                            <td class="px-6 py-4 text-right relative">
+                                <button onclick="toggleMenu('row-1')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                <div id="menu-row-1" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                    <button onclick="editStaff('row-1')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                    <button onclick="deleteStaff('row-1')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr id="row-2" class="hover:bg-gray-50 transition-colors" data-name="Fatima Al-Zahra" data-role="Store Manager">
+                            <td class="px-6 py-4 font-bold text-sm name-display">Fatima Al-Zahra</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 role-display">Store Manager</td>
+                            <td class="px-6 py-4 text-right relative">
+                                <button onclick="toggleMenu('row-2')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                <div id="menu-row-2" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                    <button onclick="editStaff('row-2')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                    <button onclick="deleteStaff('row-2')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr id="row-3" class="hover:bg-gray-50 transition-colors" data-name="Tariq Mansour" data-role="Inventory Specialist">
+                            <td class="px-6 py-4 font-bold text-sm name-display">Tariq Mansour</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 role-display">Inventory Specialist</td>
+                            <td class="px-6 py-4 text-right relative">
+                                <button onclick="toggleMenu('row-3')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                <div id="menu-row-3" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                    <button onclick="editStaff('row-3')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                    <button onclick="deleteStaff('row-3')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr id="row-4" class="hover:bg-gray-50 transition-colors" data-name="Aisha Rahman" data-role="Customer Success Agent">
+                            <td class="px-6 py-4 font-bold text-sm name-display">Aisha Rahman</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 role-display">Customer Success Agent</td>
+                            <td class="px-6 py-4 text-right relative">
+                                <button onclick="toggleMenu('row-4')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                <div id="menu-row-4" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                    <button onclick="editStaff('row-4')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                    <button onclick="deleteStaff('row-4')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr id="row-5" class="hover:bg-gray-50 transition-colors" data-name="Omar Hassan" data-role="Sales Associate">
+                            <td class="px-6 py-4 font-bold text-sm name-display">Omar Hassan</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 role-display">Sales Associate</td>
+                            <td class="px-6 py-4 text-right relative">
+                                <button onclick="toggleMenu('row-5')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                <div id="menu-row-5" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                    <button onclick="editStaff('row-5')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                    <button onclick="deleteStaff('row-5')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr id="row-6" class="hover:bg-gray-50 transition-colors" data-name="Layla Al-Farsi" data-role="Tech Support Specialist">
+                            <td class="px-6 py-4 font-bold text-sm name-display">Layla Al-Farsi</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 role-display">Tech Support Specialist</td>
+                            <td class="px-6 py-4 text-right relative">
+                                <button onclick="toggleMenu('row-6')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                <div id="menu-row-6" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                    <button onclick="editStaff('row-6')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                    <button onclick="deleteStaff('row-6')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Added Sidebar Toggle Logic
+        function toggleSidebar() { 
+            document.getElementById('mobile-sidebar').classList.toggle('-translate-x-full'); 
+            document.getElementById('sidebar-overlay').classList.toggle('hidden'); 
+        }
+
+        // ORIGINAL JS LOGIC
+        function searchStaff() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.getElementById('staffTable').getElementsByTagName('tr');
+            for (let row of rows) {
+                const name = row.dataset.name.toLowerCase();
+                row.style.display = name.includes(query) ? "" : "none";
+            }
+        }
+        function toggleMenu(id) { document.getElementById('menu-' + id).classList.toggle('active'); }
+        function openModal(id = null) {
+            document.getElementById('editId').value = id || '';
+            document.getElementById('modalTitle').innerText = id ? "Edit Employee" : "Onboard Employee";
+            if(id) {
+                const row = document.getElementById(id);
+                document.getElementById('empName').value = row.dataset.name;
+                document.getElementById('empRole').value = row.dataset.role;
+            } else {
+                document.getElementById('empName').value = '';
+                document.getElementById('empRole').value = '';
+            }
+            document.getElementById('staffModal').classList.remove('hidden');
+        }
+        function closeModal() { document.getElementById('staffModal').classList.add('hidden'); }
+        function saveStaff() {
+            const id = document.getElementById('editId').value;
+            const name = document.getElementById('empName').value;
+            const role = document.getElementById('empRole').value;
+            if(!name || !role) return alert("Please fill all fields");
+            if(id) {
+                const row = document.getElementById(id);
+                row.dataset.name = name; row.dataset.role = role;
+                row.querySelector('.name-display').innerText = name;
+                row.querySelector('.role-display').innerText = role;
+            } else {
+                const newId = 'row-' + Date.now();
+                const tr = document.createElement('tr');
+                tr.id = newId; tr.className = "hover:bg-gray-50 transition-colors";
+                tr.dataset.name = name; tr.dataset.role = role;
+                tr.innerHTML = `<td class="px-6 py-4 font-bold text-sm name-display">${name}</td>
+                                <td class="px-6 py-4 text-sm text-gray-500 role-display">${role}</td>
+                                <td class="px-6 py-4 text-right relative">
+                                    <button onclick="toggleMenu('${newId}')" class="text-brand font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">Actions</button>
+                                    <div id="menu-${newId}" class="manage-menu absolute right-6 mt-2 bg-white border rounded-xl shadow-xl z-50 w-32 p-2">
+                                        <button onclick="editStaff('${newId}')" class="block w-full text-left px-4 py-2 text-xs font-bold hover:bg-gray-50 rounded-lg">Edit</button>
+                                        <button onclick="deleteStaff('${newId}')" class="block w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg">Delete</button>
+                                    </div>
+                                </td>`;
+                document.getElementById('staffTable').appendChild(tr);
+            }
+            closeModal();
+        }
+        function editStaff(id) { toggleMenu(id); openModal(id); }
+        function deleteStaff(id) { if(confirm("Remove employee?")) document.getElementById(id).remove(); }
+        function generateSchedule() { alert("Scheduling engine optimized."); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Outlets | QatarMobileOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: '#4F46E5', 'brand-dark': '#312E81' } } } }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #D1D5DB; }
+        .manage-menu { display: none; }
+        .manage-menu.active { display: flex; }
+    </style>
+</head>
+<body class="bg-gray-50/50 font-sans flex h-screen antialiased text-gray-900 overflow-hidden relative">
+
+    <div id="branchModal" class="hidden fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+            <h2 id="modalTitle" class="text-xl font-bold mb-4">Branch Details</h2>
+            <input type="hidden" id="editId">
+            <div class="space-y-4">
+                <input type="text" id="branchName" placeholder="Branch Name" class="w-full px-4 py-2 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand">
+                <input type="text" id="branchLoc" placeholder="Location" class="w-full px-4 py-2 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand">
+                <div class="flex gap-2 pt-2">
+                    <button onclick="closeModal()" class="w-full px-4 py-2 bg-gray-100 rounded-xl text-sm font-bold">Cancel</button>
+                    <button onclick="saveBranch()" class="w-full px-4 py-2 bg-brand text-white rounded-xl text-sm font-bold">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <aside id="mobile-sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 z-40 shadow-lg shadow-gray-200/40 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-8 h-8 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold mr-3 shadow-md"><i class="fa-solid fa-layer-group text-xs"></i></div>
+            <span class="font-extrabold text-lg tracking-tight">QatarMobileOS</span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Enterprise Core</p>
+            <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-pie w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">HQ Overview</span></a>
+            <a href="inventory.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-boxes-stacked w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Global Inventory</span></a>
+            <a href="orders.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-receipt w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Order Fulfillment</span></a>
+            <a href="analytics.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-line w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Deep Analytics</span></a>
+            <a href="customers.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-users w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Customer CRM</span></a>
+
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-8 mb-3">Management</p>
+            <a href="outlets.html" class="flex items-center px-3 py-2.5 bg-indigo-50 text-brand rounded-xl font-bold border border-indigo-100/50"><i class="fa-solid fa-store w-5 text-sm"></i><span class="ml-2.5 text-sm">Branch Outlets</span></a>
+            <a href="staff.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-id-badge w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Staff & Shifts</span></a>
+            <a href="settings.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-gears w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">System Settings</span></a>
+            
+            <div class="mt-6 pt-6 border-t border-gray-100">
+                <a href="pos.html" class="flex items-center px-3 py-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl font-bold transition-all shadow-sm border border-emerald-100 group"><i class="fa-solid fa-cash-register w-5 text-sm"></i><span class="ml-2.5 text-sm">Launch POS Terminal</span></a>
+            </div>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100 bg-white">
+            <div class="flex items-center gap-3 p-2 rounded-xl">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff" class="w-10 h-10 rounded-xl shadow-sm">
+                <div>
+                    <p class="text-sm font-bold text-gray-900">Ibrahim Al-Thani</p>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">SysAdmin • Doha HQ</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden w-full">
+        <header class="h-16 bg-white/80 backdrop-blur-md border-b border-gray-200 flex items-center px-4 lg:px-8 shrink-0 z-10 lg:hidden">
+            <button onclick="toggleSidebar()" class="lg:hidden mr-4 text-gray-500 hover:text-brand"><i class="fa-solid fa-bars text-lg"></i></button>
+            <div class="flex items-center text-xs font-semibold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+                <span class="font-bold text-brand">Branch Outlets</span>
+            </div>
+        </header>
+
+        <div class="flex-1 p-4 lg:p-8 overflow-y-auto">
+            <header class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl lg:text-3xl font-extrabold">Branch Operations</h1>
+                <button onclick="addMode()" class="bg-brand text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-brand-dark transition-colors"><i class="fa-solid fa-plus lg:mr-2"></i><span class="hidden lg:inline">Add Branch Node</span></button>
+            </header>
+
+            <div id="branchGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
+                <div id="b-original" class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow" data-name="Place Vendôme Hub" data-loc="Lusail City, Qatar">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex gap-4 items-center">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-brand text-xl shrink-0"><i class="fa-solid fa-gem"></i></div>
+                            <div>
+                                <h2 class="name-display text-lg font-extrabold text-gray-900 leading-tight">Place Vendôme Hub</h2>
+                                <p class="loc-display text-xs text-gray-500 font-medium mt-1">Lusail City, Qatar</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-gray-100 pt-4 relative">
+                        <p class="text-xs font-bold text-emerald-600 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Active</p>
+                        <button onclick="toggleMenu('b-original')" class="text-xs font-bold text-gray-700 bg-gray-100 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors">Manage Node</button>
+                        <div id="menu-b-original" class="manage-menu absolute right-0 bottom-12 bg-white border rounded-xl shadow-xl flex-col p-2 w-32 z-10">
+                            <button onclick="editBranch('b-original')" class="px-4 py-2 text-sm text-left hover:bg-gray-50 rounded-lg"><i class="fa-solid fa-edit mr-2 text-gray-400"></i>Edit</button>
+                            <button onclick="deleteBranch('b-original')" class="px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 rounded-lg"><i class="fa-solid fa-trash mr-2 text-red-400"></i>Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="b-1" class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow" data-name="Doha City Center" data-loc="West Bay, Doha">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex gap-4 items-center">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 text-xl shrink-0"><i class="fa-solid fa-city"></i></div>
+                            <div>
+                                <h2 class="name-display text-lg font-extrabold text-gray-900 leading-tight">Doha City Center</h2>
+                                <p class="loc-display text-xs text-gray-500 font-medium mt-1">West Bay, Doha</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-gray-100 pt-4 relative">
+                        <p class="text-xs font-bold text-emerald-600 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Active</p>
+                        <button onclick="toggleMenu('b-1')" class="text-xs font-bold text-gray-700 bg-gray-100 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors">Manage Node</button>
+                        <div id="menu-b-1" class="manage-menu absolute right-0 bottom-12 bg-white border rounded-xl shadow-xl flex-col p-2 w-32 z-10">
+                            <button onclick="editBranch('b-1')" class="px-4 py-2 text-sm text-left hover:bg-gray-50 rounded-lg"><i class="fa-solid fa-edit mr-2 text-gray-400"></i>Edit</button>
+                            <button onclick="deleteBranch('b-1')" class="px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 rounded-lg"><i class="fa-solid fa-trash mr-2 text-red-400"></i>Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="b-2" class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow" data-name="Mall of Qatar" data-loc="Al Rayyan, Qatar">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex gap-4 items-center">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-xl shrink-0"><i class="fa-solid fa-bag-shopping"></i></div>
+                            <div>
+                                <h2 class="name-display text-lg font-extrabold text-gray-900 leading-tight">Mall of Qatar</h2>
+                                <p class="loc-display text-xs text-gray-500 font-medium mt-1">Al Rayyan, Qatar</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-gray-100 pt-4 relative">
+                        <p class="text-xs font-bold text-emerald-600 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Active</p>
+                        <button onclick="toggleMenu('b-2')" class="text-xs font-bold text-gray-700 bg-gray-100 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors">Manage Node</button>
+                        <div id="menu-b-2" class="manage-menu absolute right-0 bottom-12 bg-white border rounded-xl shadow-xl flex-col p-2 w-32 z-10">
+                            <button onclick="editBranch('b-2')" class="px-4 py-2 text-sm text-left hover:bg-gray-50 rounded-lg"><i class="fa-solid fa-edit mr-2 text-gray-400"></i>Edit</button>
+                            <button onclick="deleteBranch('b-2')" class="px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 rounded-lg"><i class="fa-solid fa-trash mr-2 text-red-400"></i>Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="b-3" class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow" data-name="Villaggio Mall" data-loc="Al Waab, Doha">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex gap-4 items-center">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 text-xl shrink-0"><i class="fa-solid fa-store"></i></div>
+                            <div>
+                                <h2 class="name-display text-lg font-extrabold text-gray-900 leading-tight">Villaggio Mall</h2>
+                                <p class="loc-display text-xs text-gray-500 font-medium mt-1">Al Waab, Doha</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-gray-100 pt-4 relative">
+                        <p class="text-xs font-bold text-gray-400 flex items-center"><span class="w-2 h-2 rounded-full bg-gray-300 mr-1.5"></span>Maintenance</p>
+                        <button onclick="toggleMenu('b-3')" class="text-xs font-bold text-gray-700 bg-gray-100 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors">Manage Node</button>
+                        <div id="menu-b-3" class="manage-menu absolute right-0 bottom-12 bg-white border rounded-xl shadow-xl flex-col p-2 w-32 z-10">
+                            <button onclick="editBranch('b-3')" class="px-4 py-2 text-sm text-left hover:bg-gray-50 rounded-lg"><i class="fa-solid fa-edit mr-2 text-gray-400"></i>Edit</button>
+                            <button onclick="deleteBranch('b-3')" class="px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 rounded-lg"><i class="fa-solid fa-trash mr-2 text-red-400"></i>Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() { 
+            document.getElementById('mobile-sidebar').classList.toggle('-translate-x-full'); 
+            document.getElementById('sidebar-overlay').classList.toggle('hidden'); 
+        }
+
+        // ORIGINAL JS LOGIC
+        function toggleMenu(id) { document.getElementById('menu-' + id).classList.toggle('active'); }
+        function closeModal() { document.getElementById('branchModal').classList.add('hidden'); }
+        function addMode() { document.getElementById('editId').value = ''; document.getElementById('branchName').value = ''; document.getElementById('branchLoc').value = ''; document.getElementById('branchModal').classList.remove('hidden'); }
+        function editBranch(id) { const card = document.getElementById(id); document.getElementById('editId').value = id; document.getElementById('branchName').value = card.dataset.name; document.getElementById('branchLoc').value = card.dataset.loc; toggleMenu(id); document.getElementById('branchModal').classList.remove('hidden'); }
+        function deleteBranch(id) { if(confirm("Are you sure?")) document.getElementById(id).remove(); }
+        function saveBranch() {
+            const id = document.getElementById('editId').value;
+            const name = document.getElementById('branchName').value;
+            const loc = document.getElementById('branchLoc').value;
+            if(id) { const card = document.getElementById(id); card.dataset.name = name; card.dataset.loc = loc; card.querySelector('.name-display').innerText = name; card.querySelector('.loc-display').innerText = loc; } 
+            else { const newId = 'b-' + Date.now(); const card = document.createElement('div'); card.id = newId; card.className = "bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"; card.dataset.name = name; card.dataset.loc = loc; card.innerHTML = `<div class="flex justify-between items-start mb-6"><div class="flex gap-4 items-center"><div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 text-xl shrink-0"><i class="fa-solid fa-store"></i></div><div><h2 class="name-display text-lg font-extrabold text-gray-900 leading-tight">${name}</h2><p class="loc-display text-xs text-gray-500 font-medium mt-1">${loc}</p></div></div></div><div class="flex items-center justify-between border-t border-gray-100 pt-4 relative"><p class="text-xs font-bold text-emerald-600 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Active</p><button onclick="toggleMenu('${newId}')" class="text-xs font-bold text-gray-700 bg-gray-100 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors">Manage Node</button><div id="menu-${newId}" class="manage-menu absolute right-0 bottom-12 bg-white border rounded-xl shadow-xl flex-col p-2 w-32 z-10"><button onclick="editBranch('${newId}')" class="px-4 py-2 text-sm text-left hover:bg-gray-50 rounded-lg"><i class="fa-solid fa-edit mr-2 text-gray-400"></i>Edit</button><button onclick="deleteBranch('${newId}')" class="px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 rounded-lg"><i class="fa-solid fa-trash mr-2 text-red-400"></i>Delete</button></div></div>`; document.getElementById('branchGrid').appendChild(card); }
+            closeModal();
+        }
+    </script>
+</body>
+</html>

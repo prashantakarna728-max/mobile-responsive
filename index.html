@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QatarMobileOS | Enterprise Retail Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }, 
+                    colors: { brand: '#4F46E5', 'brand-dark': '#312E81', 'brand-light': '#818CF8' },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                } 
+            } 
+        }
+    </script>
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .dark-glass { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased selection:bg-brand selection:text-white overflow-x-hidden">
+
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-light/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-emerald-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-purple-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <nav class="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto glass-panel rounded-2xl px-6 py-4 flex justify-between items-center shadow-lg shadow-gray-200/50">
+            <div class="flex items-center space-x-3 group cursor-pointer">
+                <div class="w-10 h-10 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold shadow-md transform group-hover:rotate-12 transition-transform duration-300">
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight text-gray-900">QatarMobileOS</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 bg-white/50 px-6 py-2 rounded-full border border-gray-100">
+                <a href="#problem" class="text-sm font-semibold text-gray-600 hover:text-brand transition-colors">The Challenge</a>
+                <a href="#features" class="text-sm font-semibold text-gray-600 hover:text-brand transition-colors">Platform Engine</a>
+                <a href="#compliance" class="text-sm font-semibold text-gray-600 hover:text-brand transition-colors">ZATCA / QCB Ready</a>
+            </div>
+            <div>
+                <a href="login.html" class="relative overflow-hidden group bg-gray-900 text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 block text-sm">
+                    <span class="relative z-10 flex items-center gap-2">Access Portal <i class="fa-solid fa-arrow-right text-xs"></i></span>
+                    <div class="absolute inset-0 h-full w-full bg-gradient-to-r from-brand via-purple-500 to-brand-dark opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative max-w-7xl mx-auto px-6 pt-40 pb-20 lg:pt-48 lg:pb-32 flex flex-col lg:flex-row items-center gap-16">
+        <div class="flex-1 text-center lg:text-left z-10">
+            <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full text-xs font-bold bg-white border border-gray-200 shadow-sm mb-8">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand"></span>
+                </span>
+                Live Demo: Multi-Branch Qatar Network
+            </div>
+            <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 leading-[1.05]">
+                Unify your premium <br class="hidden lg:block"/>
+                <span class="bg-gradient-to-r from-brand via-purple-600 to-indigo-500 bg-clip-text text-transparent">mobile storefronts.</span>
+            </h1>
+            <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                Bridge the gap between rapid POS checkouts in Vendôme and macro-level inventory tracking at Corporate HQ. Engineered specifically for high-volume GCC mobile retailers.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <a href="login.html" class="w-full sm:w-auto bg-brand text-white px-8 py-4 rounded-xl font-bold text-base hover:bg-brand-dark transition-all shadow-lg shadow-brand/30 flex items-center justify-center gap-3">
+                    Launch Interactive Prototype <i class="fa-solid fa-desktop"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="flex-1 w-full relative h-[400px] lg:h-[500px] perspective-1000 hidden md:block">
+            <div class="absolute inset-0 bg-gradient-to-tr from-gray-100 to-white rounded-3xl border border-white shadow-2xl transform rotate-y-[-10deg] rotate-x-[5deg] animate-float glass-panel flex flex-col p-6">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                    <div class="w-32 h-4 bg-gray-200 rounded-full"></div>
+                    <div class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-brand"><i class="fa-solid fa-chart-line"></i></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                        <div class="w-16 h-3 bg-gray-200 rounded-full mb-3"></div>
+                        <div class="text-2xl font-bold text-gray-900">QAR 184,200</div>
+                        <div class="text-xs text-emerald-500 font-bold mt-1">+14.2% Today</div>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                        <div class="w-16 h-3 bg-gray-200 rounded-full mb-3"></div>
+                        <div class="text-2xl font-bold text-gray-900">8 Critical</div>
+                        <div class="text-xs text-red-500 font-bold mt-1">Stock Alerts</div>
+                    </div>
+                </div>
+                <div class="flex-1 bg-gray-50 rounded-xl border border-gray-100 p-4 relative overflow-hidden">
+                    <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-brand/20 to-transparent"></div>
+                    <svg class="absolute bottom-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+                        <path d="M0,100 L0,50 Q25,80 50,40 T100,20 L100,100 Z" fill="rgba(79, 70, 229, 0.1)" stroke="#4F46E5" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="absolute -right-8 top-12 glass-panel p-4 rounded-2xl shadow-xl animate-float animation-delay-2000 flex items-center gap-4">
+                <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=120&auto=format&fit=crop&q=60" class="w-12 h-12 rounded-lg object-cover">
+                <div>
+                    <p class="text-xs font-bold text-gray-900">iPhone 15 Pro Max</p>
+                    <p class="text-[10px] text-gray-500">Checkout Complete • Vendôme</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase tracking-widest text-brand font-bold mb-3">System Architecture</h2>
+                <p class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Enterprise grade tools, beautifully designed.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                
+                <div class="md:col-span-2 bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between group overflow-hidden relative">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-brand/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 group-hover:bg-brand/10 transition-colors"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-indigo-50 text-brand rounded-xl flex items-center justify-center mb-6 text-xl shadow-sm"><i class="fa-solid fa-cash-register"></i></div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">High-Velocity POS Terminal</h3>
+                        <p class="text-gray-500 font-medium max-w-md">Distraction-free, lightning-fast checkout UI. Instantly search SKUs, process QAR payments, and sync local cache to the master database without latency.</p>
+                    </div>
+                    <div class="relative z-10 mt-6">
+                        <a href="pos.html" class="inline-flex items-center gap-2 text-sm font-bold text-brand hover:text-brand-dark">Explore POS Terminal <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 text-xl shadow-sm"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Global Inventory</h3>
+                        <p class="text-gray-500 text-sm font-medium">Track serial numbers across Doha, Al Rayyan, and logistics hubs in real-time.</p>
+                    </div>
+                    <a href="inventory.html" class="inline-flex items-center gap-2 text-sm font-bold text-emerald-600">View SKU Matrix <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="bg-gray-900 rounded-3xl p-8 border border-gray-800 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between text-white group overflow-hidden relative">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-white/10 text-white rounded-xl flex items-center justify-center mb-6 text-xl backdrop-blur-sm"><i class="fa-solid fa-chart-pie"></i></div>
+                        <h3 class="text-xl font-bold mb-2">Macro Analytics</h3>
+                        <p class="text-gray-400 text-sm font-medium">Executive oversight. Roll up regional sales into visual KPIs and exportledgers instantly.</p>
+                    </div>
+                    <a href="analytics.html" class="relative z-10 inline-flex items-center gap-2 text-sm font-bold text-indigo-400">Open Dashboard <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="md:col-span-2 bg-gradient-to-br from-indigo-50 to-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="w-12 h-12 bg-white text-brand rounded-xl flex items-center justify-center mb-6 text-xl shadow-sm border border-gray-100"><i class="fa-solid fa-network-wired"></i></div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Multi-Branch Synchronization</h3>
+                            <p class="text-gray-500 font-medium max-w-sm">When an iPhone sells at Mall of Qatar, HQ knows instantly. Automated supply chain routing eliminates phantom stock.</p>
+                        </div>
+                        
+                        <div class="hidden sm:flex flex-col gap-3">
+                            <div class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100 flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div> <span class="text-xs font-bold">Doha City Center</span>
+                            </div>
+                            <div class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100 flex items-center gap-3 opacity-80">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div> <span class="text-xs font-bold">Place Vendôme</span>
+                            </div>
+                            <div class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100 flex items-center gap-3 opacity-60">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div> <span class="text-xs font-bold">Mall of Qatar</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="compliance" class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="w-16 h-16 bg-gray-50 border border-gray-200 rounded-2xl flex items-center justify-center text-gray-900 text-2xl mx-auto mb-6 shadow-sm">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 tracking-tight mb-4">Built for GCC Compliance Standards</h2>
+            <p class="text-gray-500 font-medium mb-10 max-w-2xl mx-auto">
+                Secure your data pipeline. RetailOS maintains immutable records for all QAR transactions, tax logging, and inventory state changes ensuring readiness for strict enterprise auditing.
+            </p>
+            <a href="login.html" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-black transition-all shadow-xl hover:shadow-2xl">
+                Experience the Full Platform
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-50 border-t border-gray-200 py-12 text-center text-sm font-medium text-gray-400">
+        <p>&copy; 2026 QatarMobileOS Enterprise Systems. All systems operational.</p>
+    </footer>
+
+</body>
+</html>

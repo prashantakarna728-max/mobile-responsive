@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer CRM | QatarMobileOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: '#4F46E5', 'brand-dark': '#312E81' } } } }
+    </script>
+    <style>.custom-scrollbar::-webkit-scrollbar { width: 4px; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; }</style>
+</head>
+<body class="bg-gray-50/50 font-sans flex h-screen antialiased text-gray-900 overflow-hidden relative">
+
+    <div id="profileModal" class="hidden fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-xl font-bold">Client Profile</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-20 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+    <aside id="mobile-sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 z-30 shadow-lg shadow-gray-200/40 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-8 h-8 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold mr-3"><i class="fa-solid fa-layer-group text-xs"></i></div>
+            <span class="font-extrabold text-lg tracking-tight">QatarMobileOS</span>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Enterprise Core</p>
+            <a href="dashboard.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-pie w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">HQ Overview</span></a>
+            <a href="inventory.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-boxes-stacked w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Global Inventory</span></a>
+            <a href="orders.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-receipt w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Order Fulfillment</span></a>
+            <a href="analytics.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-line w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Deep Analytics</span></a>
+            <a href="customers.html" class="flex items-center px-3 py-2.5 bg-indigo-50 text-brand rounded-xl font-bold transition-all border border-indigo-100/50"><i class="fa-solid fa-users w-5 text-sm"></i><span class="ml-2.5 text-sm">Customer CRM</span></a>
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-8 mb-3">Management</p>
+            <a href="outlets.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-store w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Branch Outlets</span></a>
+            <a href="staff.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-id-badge w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">Staff & Shifts</span></a>
+            <a href="settings.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-gears w-5 text-sm group-hover:text-brand"></i><span class="ml-2.5 text-sm">System Settings</span></a>
+            <div class="mt-6 pt-6 border-t border-gray-100">
+                <a href="pos.html" class="flex items-center px-3 py-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl font-bold transition-all shadow-sm shadow-emerald-500/10 border border-emerald-100 group"><i class="fa-solid fa-cash-register w-5 text-sm group-hover:scale-110 transition-transform"></i><span class="ml-2.5 text-sm">Launch POS Terminal</span></a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden w-full">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center px-4 md:px-8 shrink-0">
+            <button onclick="toggleSidebar()" class="md:hidden mr-4 text-gray-500 hover:text-brand"><i class="fa-solid fa-bars text-lg"></i></button>
+            <span class="text-xs font-semibold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200 truncate">Customer Intelligence</span>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">Customer Intelligence</h1>
+                    <p class="text-gray-500 text-sm mt-1">Loyalty programs, purchase history, and client profiles.</p>
+                </div>
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" onkeyup="searchCustomers()" placeholder="Search phone or name..." class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand">
+                </div>
+            </div>
+
+            <div id="customerGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() { document.getElementById('mobile-sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
+        const customers = [{ id: 1, name: "Hassan Mahmoud", phone: "+974 5512 8492", ltv: "QAR 28,450", pts: "4,250", type: "VIP", email: "hassan@example.com", join: "Jan 2024", color: "10B981" }, { id: 2, name: "Sara Khalifa", phone: "+974 3391 1029", ltv: "QAR 3,199", pts: "120", type: "Standard", email: "sara@example.com", join: "Mar 2026", color: "4F46E5" }, { id: 3, name: "Ahmed Al-Sayed", phone: "+974 6677 8899", ltv: "QAR 12,500", pts: "1,800", type: "Gold", email: "ahmed@example.com", join: "Nov 2025", color: "F59E0B" }];
+        function renderCustomers(data) { document.getElementById('customerGrid').innerHTML = data.map(c => `<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"><div class="flex items-start justify-between mb-4"><div class="flex gap-3 items-center"><img src="https://ui-avatars.com/api/?name=${c.name}&background=${c.color}&color=fff&bold=true" class="w-12 h-12 rounded-full"><div><h3 class="font-bold text-gray-900">${c.name}</h3><p class="text-[11px] text-gray-500 font-medium">${c.phone}</p></div></div></div><div class="bg-gray-50 rounded-xl p-3 mb-4 grid grid-cols-2 gap-4"><div><p class="text-[10px] font-bold text-gray-400 uppercase">Lifetime Value</p><p class="text-sm font-black">${c.ltv}</p></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Loyalty Pts</p><p class="text-sm font-black text-brand">${c.pts}</p></div></div><button onclick="viewProfile(${c.id})" class="w-full bg-white border border-gray-200 py-2 rounded-xl text-xs font-bold hover:bg-gray-50 transition-colors">View Full Profile</button></div>`).join(''); }
+        function viewProfile(id) { const customer = customers.find(c => c.id === id); const content = document.getElementById('modalContent'); content.innerHTML = `<div class="space-y-4 text-center"><div class="w-20 h-20 bg-brand text-white rounded-full flex items-center justify-center mx-auto text-2xl font-bold">${customer.name[0]}</div><h3 class="text-lg font-bold">${customer.name}</h3><div class="grid grid-cols-2 gap-4 text-left border-t pt-4"><div><p class="text-[10px] text-gray-400 uppercase">Email</p><p class="text-sm font-semibold">${customer.email}</p></div><div><p class="text-[10px] text-gray-400 uppercase">Joined</p><p class="text-sm font-semibold">${customer.join}</p></div><div><p class="text-[10px] text-gray-400 uppercase">Tier</p><p class="text-sm font-semibold text-brand">${customer.type}</p></div></div></div>`; document.getElementById('profileModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('profileModal').classList.add('hidden'); }
+        function searchCustomers() { const query = document.getElementById('searchInput').value.toLowerCase(); renderCustomers(customers.filter(c => c.name.toLowerCase().includes(query) || c.phone.includes(query))); }
+        renderCustomers(customers);
+    </script>
+</body>
+</html>

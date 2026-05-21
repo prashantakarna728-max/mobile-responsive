@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HQ Console | QatarMobileOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: '#4F46E5', 'brand-dark': '#312E81', pos: '#10B981' } } } }
+    </script>
+    <style>.glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); } .custom-scrollbar::-webkit-scrollbar { width: 4px; } .custom-scrollbar::-webkit-scrollbar-track { background: transparent; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; } .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #D1D5DB; }</style>
+</head>
+<body class="bg-gray-50/50 font-sans flex h-screen antialiased text-gray-900 overflow-hidden selection:bg-brand selection:text-white relative">
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-20 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+    <aside id="mobile-sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 z-30 shadow-lg shadow-gray-200/40 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-8 h-8 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white font-extrabold mr-3 shadow-md"><i class="fa-solid fa-layer-group text-xs"></i></div>
+            <span class="font-extrabold text-lg tracking-tight">QatarMobileOS</span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Enterprise Core</p>
+            <a href="dashboard.html" class="flex items-center px-3 py-2.5 bg-indigo-50 text-brand rounded-xl font-bold transition-all border border-indigo-100/50"><i class="fa-solid fa-chart-pie w-5 text-sm"></i><span class="ml-2.5 text-sm">HQ Overview</span></a>
+            <a href="inventory.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-boxes-stacked w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Global Inventory</span></a>
+            <a href="orders.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-receipt w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Order Fulfillment</span></a>
+            <a href="analytics.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-chart-line w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Deep Analytics</span></a>
+            <a href="customers.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group relative"><i class="fa-solid fa-users w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Customer CRM</span><span class="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-brand"></span></a>
+            <p class="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-8 mb-3">Management</p>
+            <a href="outlets.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-store w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Branch Outlets</span></a>
+            <a href="staff.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-id-badge w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">Staff & Shifts</span></a>
+            <a href="settings.html" class="flex items-center px-3 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-semibold transition-all group"><i class="fa-solid fa-gears w-5 text-sm group-hover:text-brand transition-colors"></i><span class="ml-2.5 text-sm">System Settings</span></a>
+            <div class="mt-6 pt-6 border-t border-gray-100">
+                <a href="pos.html" class="flex items-center px-3 py-3 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl font-bold transition-all shadow-sm shadow-emerald-500/10 border border-emerald-100 group"><i class="fa-solid fa-cash-register w-5 text-sm group-hover:scale-110 transition-transform"></i><span class="ml-2.5 text-sm">Launch POS Terminal</span></a>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-gray-100 bg-white">
+            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors"><img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff&bold=true" class="w-10 h-10 rounded-xl shadow-sm"><div class="min-w-0 flex-1"><p class="text-sm font-bold text-gray-900 truncate">Ibrahim Al-Thani</p><p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider truncate">SysAdmin • Doha HQ</p></div></div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden w-full relative">
+        <header class="h-16 glass-panel border-b border-gray-200 flex items-center justify-between px-4 md:px-8 shrink-0 z-10">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="md:hidden mr-4 text-gray-500 hover:text-brand"><i class="fa-solid fa-bars text-lg"></i></button>
+                <div class="hidden md:flex items-center text-xs font-semibold text-gray-500 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm"><span class="hover:text-gray-900 cursor-pointer">Qatar Enterprise Node</span><i class="fa-solid fa-chevron-right mx-2 text-[9px] text-gray-300"></i><span class="font-bold text-brand">HQ Console</span></div>
+            </div>
+            <div class="flex items-center space-x-3 md:space-x-5">
+                <div class="relative cursor-pointer group bg-white p-2 rounded-lg border border-gray-200 shadow-sm hover:border-gray-300 transition-all"><i class="fa-regular fa-bell text-gray-400 group-hover:text-gray-700 transition-colors"></i><span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white animate-pulse"></span></div>
+                <div class="h-6 w-px bg-gray-200"></div>
+                <a href="login.html" class="text-xs text-gray-500 hover:text-rose-600 font-bold transition-colors flex items-center gap-2 group"><span class="hidden md:block">Close Session</span> <i class="fa-solid fa-arrow-right-from-bracket text-gray-400 group-hover:text-rose-500 transition-colors"></i></a>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+                <div><h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">Network Operational Health</h1><p class="text-gray-500 text-sm mt-1.5 font-medium">Real-time telemetry across all Qatari physical distribution channels.</p></div>
+                <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                    <div class="bg-emerald-50 border border-emerald-100 text-emerald-700 px-3 md:px-4 py-2 rounded-xl text-xs font-bold shadow-sm flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping absolute"></span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 relative"></span> ZATCA Sync Active</div>
+                    <button class="bg-white border border-gray-200 text-gray-700 px-3 md:px-4 py-2 rounded-xl text-xs font-bold hover:bg-gray-50 hover:shadow-md transition-all flex items-center gap-2 shadow-sm"><i class="fa-solid fa-cloud-arrow-down text-brand"></i> Export Ledger</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group"><div class="absolute right-0 top-0 w-24 h-24 bg-brand/5 rounded-full blur-xl transform translate-x-1/2 -translate-y-1/2"></div><div class="flex justify-between items-start mb-4 relative z-10"><div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-brand border border-indigo-100/50"><i class="fa-solid fa-wallet text-lg"></i></div><span class="flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100"><i class="fa-solid fa-arrow-trend-up mr-1.5"></i> 14.2%</span></div><p class="text-xs font-bold text-gray-400 uppercase tracking-widest relative z-10">Gross Sales (MTD)</p><h3 class="text-2xl font-black text-gray-900 mt-1 relative z-10">QAR 4,892,450</h3></div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group"><div class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl transform translate-x-1/2 -translate-y-1/2"></div><div class="flex justify-between items-start mb-4 relative z-10"><div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100/50"><i class="fa-solid fa-bags-shopping text-lg"></i></div><span class="flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100"><i class="fa-solid fa-arrow-trend-up mr-1.5"></i> 6.8%</span></div><p class="text-xs font-bold text-gray-400 uppercase tracking-widest relative z-10">Total Receipts</p><h3 class="text-2xl font-black text-gray-900 mt-1 relative z-10">1,842</h3></div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group"><div class="absolute right-0 top-0 w-24 h-24 bg-rose-500/5 rounded-full blur-xl transform translate-x-1/2 -translate-y-1/2"></div><div class="flex justify-between items-start mb-4 relative z-10"><div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 border border-rose-100/50"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div><span class="flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">Action Required</span></div><p class="text-xs font-bold text-gray-400 uppercase tracking-widest relative z-10">Low Stock SKUs</p><h3 class="text-2xl font-black text-gray-900 mt-1 relative z-10">24 Items</h3></div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group"><div class="absolute right-0 top-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl transform translate-x-1/2 -translate-y-1/2"></div><div class="flex justify-between items-start mb-4 relative z-10"><div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 border border-amber-100/50"><i class="fa-solid fa-satellite-dish text-lg"></i></div><span class="flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">All Online</span></div><p class="text-xs font-bold text-gray-400 uppercase tracking-widest relative z-10">Active Branches</p><h3 class="text-2xl font-black text-gray-900 mt-1 relative z-10">14 Stores</h3></div>
+            </div>
+
+            </div>
+    </main>
+
+    <script>
+        function toggleSidebar() { document.getElementById('mobile-sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
+        // Keep Chart JS init exact same
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Terminal | QatarMobileOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }, 
+                    colors: { brand: '#4F46E5', 'brand-dark': '#312E81', pos: '#10B981' } 
+                } 
+            } 
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 10px; }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #9CA3AF; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans flex h-screen antialiased text-gray-900 overflow-hidden selection:bg-brand selection:text-white">
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden relative bg-gray-50/50">
+        
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6 shrink-0 z-10 shadow-sm">
+            <div class="flex items-center gap-4">
+                <a href="dashboard.html" class="w-10 h-10 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-black tracking-tight text-gray-900">Place Vendôme POS</h1>
+                    <p class="text-[10px] font-bold text-pos uppercase tracking-wider"><span class="inline-block w-1.5 h-1.5 bg-pos rounded-full mr-1 animate-pulse"></span>Terminal 01 - Active</p>
+                </div>
+            </div>
+
+            <div class="flex-1 max-w-xl mx-4 lg:mx-8 relative">
+                <i class="fa-solid fa-barcode absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Scan barcode or search..." class="w-full pl-11 pr-4 py-2.5 bg-gray-100 border-transparent focus:bg-white border focus:border-brand rounded-xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-brand/10 transition-all shadow-inner">
+                <div class="hidden sm:block absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-white border border-gray-200 rounded text-[10px] font-bold text-gray-400">Active</div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold text-gray-900">Ibrahim Al-Thani</p>
+                    <p class="text-xs text-gray-500 font-medium">Cashier</p>
+                </div>
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff&bold=true" class="w-10 h-10 rounded-xl shadow-sm border border-gray-200">
+                <button onclick="toggleMobileCart()" class="lg:hidden ml-2 relative w-10 h-10 bg-brand text-white rounded-xl shadow-md flex items-center justify-center">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span id="mobile-cart-badge" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                </button>
+            </div>
+        </header>
+
+        <div id="category-filters" class="bg-white border-b border-gray-200 px-4 lg:px-6 py-3 flex gap-2 overflow-x-auto no-scrollbar shrink-0">
+            <button onclick="filterCategory('all')" class="category-btn px-5 py-2 rounded-lg bg-brand text-white text-sm font-bold shadow-md shadow-brand/20 whitespace-nowrap" data-category="all">All Products</button>
+            <button onclick="filterCategory('Smartphones')" class="category-btn px-5 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors" data-category="Smartphones">Smartphones</button>
+            <button onclick="filterCategory('Tablets')" class="category-btn px-5 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors" data-category="Tablets">Tablets</button>
+            <button onclick="filterCategory('Audio & Wearables')" class="category-btn px-5 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors" data-category="Audio & Wearables">Audio & Wearables</button>
+            <button onclick="filterCategory('Accessories')" class="category-btn px-5 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors" data-category="Accessories">Accessories</button>
+            <button onclick="filterCategory('Gaming')" class="category-btn px-5 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors" data-category="Gaming">Gaming</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 lg:p-6 custom-scrollbar">
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+                </div>
+        </div>
+    </main>
+
+    <div id="cart-overlay" class="fixed inset-0 bg-gray-900/50 z-40 hidden lg:hidden" onclick="toggleMobileCart()"></div>
+
+    <aside id="pos-cart-sidebar" class="w-full sm:w-[420px] bg-white border-l border-gray-200 flex flex-col shrink-0 z-50 shadow-2xl fixed inset-y-0 right-0 transform translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        
+        <button onclick="toggleMobileCart()" class="lg:hidden absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 z-50">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div>
+                <h2 class="text-lg font-black text-gray-900">Current Order</h2>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">#ORD-9422</p>
+            </div>
+            <button onclick="clearCart()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center transition-colors lg:mr-0 mr-8" title="Clear entire cart">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+
+        <div class="px-5 py-3 border-b border-gray-100">
+            <div class="flex items-center justify-between p-3 rounded-xl border border-dashed border-gray-300 hover:border-brand hover:bg-indigo-50/50 cursor-pointer transition-all group">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-brand group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-user text-xs"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-500 group-hover:text-brand transition-colors">Walk-in Customer</span>
+                </div>
+                <i class="fa-solid fa-user-check text-brand"></i>
+            </div>
+        </div>
+
+        <div id="cart-items" class="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-4">
+            </div>
+
+        <div class="bg-gray-50 border-t border-gray-200 p-5 shrink-0">
+            <div class="space-y-2.5 mb-5">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-500 font-medium">Subtotal</span>
+                    <span id="summary-subtotal" class="font-bold text-gray-900">0.00 QAR</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-500 font-medium">Discount</span>
+                    <span class="font-bold text-rose-500">- 0.00 QAR</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-500 font-medium">VAT (5%)</span>
+                    <span id="summary-vat" class="font-bold text-gray-900">0.00 QAR</span>
+                </div>
+                <div class="pt-3 border-t border-gray-200 border-dashed flex justify-between items-end mt-1">
+                    <span class="text-gray-900 font-black text-lg">Total</span>
+                    <span class="font-black text-3xl text-brand tracking-tight"><span id="summary-total">0.00</span> <span class="text-sm text-gray-500 ml-1">QAR</span></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="alert('Processing Cash Payment...')" class="py-4 bg-white border-2 border-gray-200 rounded-xl font-bold text-gray-700 hover:border-brand hover:text-brand transition-all flex flex-col items-center justify-center gap-1 shadow-sm">
+                    <i class="fa-solid fa-money-bill-wave text-lg"></i>
+                    Cash
+                </button>
+                <button onclick="alert('Processing Card/NFC Payment...')" class="py-4 bg-pos border-2 border-pos rounded-xl font-black text-white hover:bg-emerald-600 hover:border-emerald-600 transition-all flex flex-col items-center justify-center gap-1 shadow-md shadow-emerald-500/30">
+                    <i class="fa-regular fa-credit-card text-lg"></i>
+                    Card / NFC
+                </button>
+            </div>
+            
+        </div>
+    </aside>
+
+    <script>
+        function toggleMobileCart() {
+            document.getElementById('pos-cart-sidebar').classList.toggle('translate-x-full');
+            document.getElementById('cart-overlay').classList.toggle('hidden');
+        }
+
+        // ORIGINAL UNTOUCHED JS (With exact 20 products matching inventory)
+        const products = [
+            { id: 1, name: "iPhone 15 Pro Max 256GB", brand: "Apple", category: "Smartphones", price: 5199, stock: 142, img: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=300&q=80" },
+            { id: 2, name: "Galaxy S24 Ultra 512GB", brand: "Samsung", category: "Smartphones", price: 4850, stock: 3, img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=300&q=80" },
+            { id: 3, name: "MacBook Air M2 15\"", brand: "Apple", category: "Tablets", price: 5499, stock: 0, img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=300&q=80" },
+            { id: 4, name: "PlayStation 5 Console", brand: "Sony", category: "Gaming", price: 2199, stock: 4, img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=300&q=80" },
+            { id: 5, name: "iPad Pro 12.9\" M2", brand: "Apple", category: "Tablets", price: 4699, stock: 45, img: "https://images.unsplash.com/photo-1589739900243-4b52cd9b104e?auto=format&fit=crop&w=300&q=80" },
+            { id: 6, name: "Galaxy Z Fold 5 512GB", brand: "Samsung", category: "Smartphones", price: 6799, stock: 12, img: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=300&q=80" },
+            { id: 7, name: "AirPods Pro 2 (USB-C)", brand: "Apple", category: "Audio & Wearables", price: 949, stock: 210, img: "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?auto=format&fit=crop&w=300&q=80" },
+            { id: 8, name: "Bose QuietComfort Ultra", brand: "Bose", category: "Audio & Wearables", price: 1599, stock: 15, img: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=300&q=80" },
+            { id: 9, name: "Nintendo Switch OLED", brand: "Nintendo", category: "Gaming", price: 1399, stock: 82, img: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=300&q=80" },
+            { id: 10, name: "Pixel 8 Pro 128GB", brand: "Google", category: "Smartphones", price: 3999, stock: 34, img: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=300&q=80" },
+            { id: 11, name: "Apple Watch Ultra 2", brand: "Apple", category: "Audio & Wearables", price: 3199, stock: 8, img: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?auto=format&fit=crop&w=300&q=80" },
+            { id: 12, name: "Galaxy Watch 6 Classic", brand: "Samsung", category: "Audio & Wearables", price: 1499, stock: 22, img: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=300&q=80" },
+            { id: 13, name: "Sony WH-1000XM5 ANC", brand: "Sony", category: "Audio & Wearables", price: 1499, stock: 38, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80" },
+            { id: 14, name: "OnePlus 12 256GB", brand: "OnePlus", category: "Smartphones", price: 3299, stock: 27, img: "https://images.unsplash.com/photo-1565630916779-e303be97b6f5?auto=format&fit=crop&w=300&q=80" },
+            { id: 15, name: "Galaxy Tab S9 Ultra", brand: "Samsung", category: "Tablets", price: 4899, stock: 18, img: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=300&q=80" },
+            { id: 16, name: "Apple MagSafe Charger", brand: "Apple", category: "Accessories", price: 199, stock: 350, img: "https://images.unsplash.com/photo-1622445262465-2481c4574875?auto=format&fit=crop&w=300&q=80" },
+            { id: 17, name: "Samsung 45W Charger", brand: "Samsung", category: "Accessories", price: 149, stock: 185, img: "https://images.unsplash.com/photo-1543269664-76bc3997d9ea?auto=format&fit=crop&w=300&q=80" },
+            { id: 18, name: "Anker PowerCore 10k", brand: "Anker", category: "Accessories", price: 129, stock: 412, img: "https://images.unsplash.com/photo-1608298910484-88cb0f7eb80a?auto=format&fit=crop&w=300&q=80" },
+            { id: 19, name: "iPhone 15 Silicone Case", brand: "Apple", category: "Accessories", price: 249, stock: 95, img: "https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=300&q=80" },
+            { id: 20, name: "Logitech MX Master 3S", brand: "Logitech", category: "Accessories", price: 450, stock: 41, img: "https://images.unsplash.com/photo-1527814050087-379381547961?auto=format&fit=crop&w=300&q=80" }
+        ];
+
+        let cart = [];
+        let currentCategory = "all";
+        let searchQuery = "";
+
+        window.addEventListener("DOMContentLoaded", () => {
+            renderProducts();
+            renderCart();
+        });
+
+        function renderProducts() {
+            const gridContainer = document.getElementById("product-grid");
+            gridContainer.innerHTML = "";
+
+            const filtered = products.filter(p => {
+                const matchesCat = currentCategory === "all" || p.category === currentCategory;
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            if(filtered.length === 0) {
+                gridContainer.innerHTML = `
+                    <div class="col-span-full py-12 flex flex-col items-center justify-center text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass text-4xl mb-3"></i>
+                        <p class="font-bold text-sm">No items found matching criteria.</p>
+                    </div>`;
+                return;
+            }
+
+            filtered.forEach(product => {
+                const isOutOfStock = product.stock === 0;
+                const card = document.createElement("div");
+                
+                card.className = `bg-white rounded-2xl border border-gray-200 p-4 cursor-pointer hover:border-brand hover:shadow-lg hover:-translate-y-1 transition-all group flex flex-col h-full active:scale-95 relative ${isOutOfStock ? 'opacity-50' : ''}`;
+                
+                if(!isOutOfStock) {
+                    card.setAttribute("onclick", `addToCart(${product.id})`);
+                }
+
+                let stockBadgeClass = "text-emerald-600 bg-emerald-50";
+                if(isOutOfStock) stockBadgeClass = "text-gray-500 bg-gray-100";
+                else if(product.stock <= 5) stockBadgeClass = "text-rose-600 bg-rose-50";
+                else if(product.stock <= 15) stockBadgeClass = "text-amber-600 bg-amber-50";
+
+                card.innerHTML = `
+                    ${isOutOfStock ? '<div class="absolute inset-0 bg-white/10 z-10 rounded-2xl pointer-events-none"></div>' : ''}
+                    <div class="w-full aspect-square bg-gray-100 rounded-xl mb-3 overflow-hidden flex items-center justify-center text-gray-400 relative">
+                        <img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">${product.brand}</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-tight mb-2 flex-1">${product.name}</h3>
+                    <div class="flex items-end justify-between mt-auto">
+                        <p class="text-brand font-black">${product.price.toLocaleString()} <span class="text-[10px]">QAR</span></p>
+                        <p class="text-[10px] font-bold ${stockBadgeClass} px-1.5 py-0.5 rounded">
+                            ${isOutOfStock ? 'Out of Stock' : `${product.stock} In Stock`}
+                        </p>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product || product.stock === 0) return;
+
+            const existingCartItem = cart.find(item => item.id === productId);
+
+            if (existingCartItem) {
+                if (existingCartItem.quantity >= product.stock) {
+                    alert(`Maximum stock reached. Only ${product.stock} units are available.`);
+                    return;
+                }
+                existingCartItem.quantity++;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    img: product.img,
+                    quantity: 1,
+                    maxStock: product.stock
+                });
+            }
+            renderCart();
+            
+            // Auto open cart on mobile when an item is added
+            if (window.innerWidth < 1024) {
+                document.getElementById('pos-cart-sidebar').classList.remove('translate-x-full');
+                document.getElementById('cart-overlay').classList.remove('hidden');
+            }
+        }
+
+        function updateQuantity(productId, delta) {
+            const cartItem = cart.find(item => item.id === productId);
+            if (!cartItem) return;
+
+            const newQty = cartItem.quantity + delta;
+
+            if (newQty <= 0) {
+                removeFromCart(productId);
+            } else if (newQty > cartItem.maxStock) {
+                alert(`Cannot exceed inventory limit of ${cartItem.maxStock} units.`);
+            } else {
+                cartItem.quantity = newQty;
+                renderCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            renderCart();
+        }
+
+        function clearCart() {
+            if(cart.length === 0) return;
+            if(confirm("Are you sure you want to discard the current running terminal transaction?")) {
+                cart = [];
+                renderCart();
+            }
+        }
+
+        function renderCart() {
+            const cartContainer = document.getElementById("cart-items");
+            cartContainer.innerHTML = "";
+            
+            // Update mobile badge
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('mobile-cart-badge');
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-gray-400 py-12">
+                        <i class="fa-solid fa-basket-shopping text-5xl mb-4 text-gray-200"></i>
+                        <p class="font-bold text-sm">Terminal Basket is Empty</p>
+                        <p class="text-xs text-gray-400 mt-1">Tap product items to build sale</p>
+                    </div>`;
+                updateSummaryTotals(0);
+                return;
+            }
+
+            let computedSubtotal = 0;
+
+            cart.forEach(item => {
+                computedSubtotal += (item.price * item.quantity);
+                const itemNode = document.createElement("div");
+                itemNode.className = "flex gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100 relative group";
+                
+                itemNode.innerHTML = `
+                    <div class="w-14 h-14 bg-white rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center shrink-0">
+                        <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-gray-900 truncate pr-6">${item.name}</h4>
+                        <p class="text-brand font-black text-sm mt-0.5">${(item.price * item.quantity).toLocaleString()} <span class="text-[10px] text-gray-400 font-medium">QAR</span></p>
+                        
+                        <div class="flex items-center gap-3 mt-2">
+                            <div class="flex items-center bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="w-8 h-7 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                                <span class="w-8 h-7 flex items-center justify-center text-xs font-bold text-gray-900 border-x border-gray-200">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="w-8 h-7 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-gray-900"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-bold">${item.price} QAR / ea</span>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="absolute top-3 right-3 text-gray-300 hover:text-rose-500 transition-colors" title="Remove line item">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+                cartContainer.appendChild(itemNode);
+            });
+
+            updateSummaryTotals(computedSubtotal);
+        }
+
+        function updateSummaryTotals(subtotal) {
+            const vatRate = 0.05; 
+            const vatAmount = subtotal * vatRate;
+            const absoluteTotal = subtotal + vatAmount;
+
+            document.getElementById("summary-subtotal").innerText = `${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} QAR`;
+            document.getElementById("summary-vat").innerText = `${vatAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} QAR`;
+            document.getElementById("summary-total").innerText = absoluteTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        // Filters
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            document.querySelectorAll(".category-btn").forEach(btn => {
+                if(btn.getAttribute("data-category") === category) {
+                    btn.className = "category-btn px-5 py-2 rounded-lg bg-brand text-white text-sm font-bold shadow-md shadow-brand/20 whitespace-nowrap";
+                } else {
+                    btn.className = "category-btn px-5 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors";
+                }
+            });
+
+            renderProducts();
+        }
+
+        // Search Input
+        function handleSearch(val) {
+            searchQuery = val;
+            renderProducts();
+        }
+    </script>
+</body>
+</html>
